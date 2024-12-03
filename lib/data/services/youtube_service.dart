@@ -16,10 +16,9 @@ class YoutubeService {
         artist: video.author,
         thumbnailUrl: video.thumbnails.highResUrl,
         videoUrl: audioStream.url.toString(),
-        duration: video.duration,
       );
     } catch (e) {
-      throw Exception('Failed to parse YouTube URL: $e');
+      throw Exception('Failed to get track info: $e');
     }
   }
 

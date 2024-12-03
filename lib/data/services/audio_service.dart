@@ -1,5 +1,4 @@
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import '../../domain/entities/track.dart';
 
 class AudioService {
@@ -18,20 +17,7 @@ class AudioService {
       }
 
       await _player.stop();
-
-      final audioSource = AudioSource.uri(
-        Uri.parse(track.videoUrl!),
-        tag: MediaItem(
-          id: track.id,
-          title: track.title,
-          artist: track.artist,
-          artUri: track.thumbnailUrl != null
-              ? Uri.parse(track.thumbnailUrl!)
-              : null,
-        ),
-      );
-
-      await _player.setAudioSource(audioSource);
+      await _player.setUrl(track.videoUrl!);
       _currentTrack = track;
       await _player.play();
     } catch (e) {
