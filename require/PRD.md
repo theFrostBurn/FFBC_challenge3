@@ -1,43 +1,99 @@
+# 음악 플레이어 앱 PRD
 
-# 예시
 
-
-### Project overview 
+### Project Overview 
 
 **프로젝트 이름**: 음악 플레이어 앱 (Flutter Cupertino 위젯 활용)
 
-**목표**: 사용자가 YouTube Music과 유사한 UI를 iOS 스타일로 재해석, 음악을 탐색, 재생, 관리할 수 있는 모바일 앱을 구축합니다. 직관적인 UX와 세련된 UI를 제공하며, 사용자 경험을 강화하기 위해 Cupertino 위젯을 적극 활용합니다.
+**목표**: YouTube Music의 iOS 스타일 재해석 버전으로, 직관적인 UX와 세련된 UI를 제공하는 음악 플레이어 앱 구현
 
 
 
-### Core functionalities
+### Core Functionalities
 
 1. **홈 화면**:
+- 상단 바
+  • YouTube Music 스타일 로고
+  • 알림, 검색, 프로필 아이콘
+- 카테고리 필터 바
+  • 운동, 에너지 충전, 팟캐스트 등 가로 스크롤
+- 콘텐츠 영역
+  • 빠른 선곡 섹션 (3x3 그리드 레이아웃)
+  • 추천 플레이리스트 섹션
+- 하단 미니 플레이어
+  • 현재 재생곡 정보
+  • 간단한 재생 컨트롤
 
-• 인기 플레이리스트, 추천 플레이리스트, 장르별 분류(운동, 에너지 충전, 팟캐스트 등) 제공
-• 현재 재생 중인 음악을 화면 하단에 미니 플레이어로 표시
+2. **음악 재생 화면**:
+- 대형 앨범아트 표시
+- 곡 정보 (제목, 아티스트)
+- 재생 컨트롤
+  • 이전/다음 트랙
+  • 재생/일시정지
+  • 셔플, 반복 모드
+- CupertinoSlider 기반 진행바
+- 좋아요 버튼
 
-1. **음악 재생 화면:**
+3. **하단 네비게이션 바**:
+- 홈, 샘플, 둘러보기, 보관함 탭
+- CupertinoTabBar 사용
+- 선택된 탭 하이라이트 효과
 
-• 커버 이미지, 아티스트 정보, 좋아요 버튼, 다음/이전 트랙 버튼 제공
-• 재생 시간 표시 및 사용자 상호작용을 위한 플레이어 기능 (일시정지, 재생, 반복 및 셔플 버튼 포함)
-• Cupertino 슬라이더로 재생 위치 조절 기능 구현
-
-1. **하단 네비게이션 바**:
-• 홈, 샘플, 둘러보기, 보관함의 네 가지 주요 메뉴 제공
-• 각 메뉴는 Cupertino Icons로 표현하고, 선택된 아이콘은 Cupertino 스타일로 강조 (홈을 제외한 나머지는 버튼만 구현하고 간단한 화면만 구현)
-2. **음악 재생 구현**
-
-• YouTube URL을 활용하여 간단한 음악 재생 기능 구현
+4. **음악 재생 기능**:
+- YouTube URL 기반 음원 재생
+- 백그라운드 재생 지원
 
 
 
 ### Doc
 
-해당 프로젝트에 필요한 패키지,라이브러리,문서를 파악하여 작성
+필요한 주요 패키지:
+- youtube_explode_dart: ^2.0.2 (YouTube URL 파싱)
+- just_audio: ^0.9.36 (오디오 재생)
+- cached_network_image: ^3.3.1 (이미지 캐싱)
+- provider: ^6.1.1 (상태 관리)
+- flutter_bloc: ^8.1.3 (상태 관리)
+
+UI 관련:
+- cupertino_icons: ^1.0.6
+- flutter_svg: ^2.0.9 (SVG 아이콘)
 
 
 
-### Current file structure (현재 파일 구조)
+### File Structure
 
-해당 프로젝트에 맞는 파일구조를 설계하고 작성
+lib/
+├── main.dart
+├── app.dart
+├── config/
+│ ├── theme.dart
+│ └── routes.dart
+├── core/
+│ ├── constants/
+│ ├── errors/
+│ └── utils/
+├── data/
+│ ├── models/
+│ ├── repositories/
+│ └── services/
+├── domain/
+│ ├── entities/
+│ └── usecases/
+├── presentation/
+│ ├── bloc/
+│ ├── pages/
+│ │ ├── home/
+│ │ ├── player/
+│ │ ├── explore/
+│ │ └── library/
+│ └── widgets/
+│ ├── common/
+│ ├── home/
+│ └── player/
+└── di/
+└── injection.dart
+
+```
+
+이 구조는 클린 아키텍처를 따르며, UI 컴포넌트와 비즈니스 로직을 명확히 분리합니다.
+특히 홈 화면과 플레이어 화면의 복잡한 UI 요소들을 효율적으로 관리할 수 있도록 설계되었습니다.
