@@ -4,13 +4,13 @@ import '../../../domain/entities/category.dart';
 class CategoryFilterBar extends StatelessWidget {
   final List<Category> categories;
   final Category? selectedCategory;
-  final ValueChanged<Category>? onCategorySelected;
+  final ValueChanged<Category> onCategorySelected;
 
   const CategoryFilterBar({
     super.key,
     required this.categories,
-    this.selectedCategory,
-    this.onCategorySelected,
+    required this.selectedCategory,
+    required this.onCategorySelected,
   });
 
   @override
@@ -24,7 +24,7 @@ class CategoryFilterBar extends StatelessWidget {
           itemCount: categories.length,
           itemBuilder: (context, index) {
             final category = categories[index];
-            final isSelected = category == selectedCategory;
+            final isSelected = selectedCategory?.id == category.id;
 
             return Padding(
               padding: const EdgeInsets.only(right: 8),
@@ -34,7 +34,7 @@ class CategoryFilterBar extends StatelessWidget {
                     ? CupertinoColors.activeBlue
                     : CupertinoColors.systemGrey5,
                 borderRadius: BorderRadius.circular(20),
-                onPressed: () => onCategorySelected?.call(category),
+                onPressed: () => onCategorySelected(category),
                 child: Text(
                   category.name,
                   style: TextStyle(
