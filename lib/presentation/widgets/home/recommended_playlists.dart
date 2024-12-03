@@ -10,7 +10,7 @@ class RecommendedPlaylists extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(16, 32, 16, 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               '추천 플레이리스트',
               style: TextStyle(
@@ -19,6 +19,7 @@ class RecommendedPlaylists extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 16),
           SizedBox(
             height: 200,
             child: ListView.builder(
@@ -28,40 +29,45 @@ class RecommendedPlaylists extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CupertinoButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {},
-                      child: Container(
-                        width: 160,
-                        color: CupertinoColors.systemGrey5,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 160,
-                              color: CupertinoColors.systemGrey4,
-                              child: const Center(
-                                child: Icon(
-                                  CupertinoIcons.music_note_2,
-                                  size: 48,
-                                  color: CupertinoColors.systemGrey,
-                                ),
+                  child: CupertinoButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {},
+                    child: Container(
+                      width: 160,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: CupertinoColors.systemGrey6,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(8),
+                              ),
+                              color: CupertinoColors.systemGrey5,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                CupertinoIcons.music_note_2,
+                                size: 48,
+                                color: CupertinoColors.systemGrey,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                '플레이리스트 ${index + 1}',
-                                style: const TextStyle(
-                                  color: CupertinoColors.black,
-                                  fontSize: 14,
-                                ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '추천 플레이리스트 ${index + 1}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: CupertinoColors.black,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
