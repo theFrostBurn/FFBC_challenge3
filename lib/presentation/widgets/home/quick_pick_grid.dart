@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../domain/entities/track.dart';
 import '../../../data/services/audio_service.dart';
 import '../../../data/services/youtube_service.dart';
+import '../../../data/services/navigation_service.dart';
 
 class QuickPickGrid extends StatelessWidget {
   const QuickPickGrid({super.key});
@@ -89,6 +90,12 @@ class _QuickPickItem extends StatelessWidget {
                     await youtubeService.getTrackFromUrl(track.videoUrl!);
                 // 트랙 재생
                 await audioService.play(trackWithUrl);
+
+                // 재생 화면으로 전환
+                if (context.mounted) {
+                  final navigationService = context.read<NavigationService>();
+                  navigationService.navigateToTab(1); // 샘플(재생) 탭으로 전환
+                }
               }
             });
           }
