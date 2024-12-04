@@ -43,8 +43,8 @@ class RecommendedPlaylists extends StatelessWidget {
                         children: [
                           Container(
                             height: 160,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.vertical(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(8),
                               ),
                               color: CupertinoColors.systemGrey5,

@@ -82,10 +82,12 @@ class MiniPlayer extends StatelessWidget {
             CupertinoButton(
               padding: EdgeInsets.zero,
               onPressed: () {
-                audioService.resume();
+                audioService.togglePlay();
               },
-              child: const Icon(
-                CupertinoIcons.play_fill,
+              child: Icon(
+                audioService.isPlaying
+                    ? CupertinoIcons.pause_fill
+                    : CupertinoIcons.play_fill,
                 size: 30,
               ),
             ),

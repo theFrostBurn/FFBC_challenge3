@@ -5,8 +5,20 @@ import '../../domain/entities/track.dart';
 class AudioService extends ChangeNotifier {
   final _player = AudioPlayer();
   Track? _currentTrack;
+  bool _isPlaying = false;
+
+  AudioService() {
+    _player.playerStateStream.listen((state) {
+      final playing = state.playing;
+      if (_isPlaying != playing) {
+        _isPlaying = playing;
+        notifyListeners();
+      }
+    });
+  }
 
   Track? get currentTrack => _currentTrack;
+  bool get isPlaying => _isPlaying;
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
   Stream<Duration?> get positionStream => _player.positionStream;
   Stream<Duration?> get durationStream => _player.durationStream;
@@ -35,6 +47,16 @@ class AudioService extends ChangeNotifier {
   Future<void> resume() async {
     await _player.play();
     notifyListeners();
+  }
+
+  Future<void> togglePlay() async {
+    if (_currentTrack == null) return;
+
+    if (_isPlaying) {
+      await pause();
+    } else {
+      await resume();
+    }
   }
 
   Future<void> stop() async {

@@ -8,6 +8,7 @@ class PlayerControls extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final audioService = context.watch<AudioService>();
+    final isPlaying = audioService.isPlaying;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -26,12 +27,10 @@ class PlayerControls extends StatelessWidget {
         CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: () {
-            if (audioService.currentTrack != null) {
-              audioService.resume();
-            }
+            audioService.togglePlay();
           },
-          child: const Icon(
-            CupertinoIcons.play_fill,
+          child: Icon(
+            isPlaying ? CupertinoIcons.pause_fill : CupertinoIcons.play_fill,
             size: 50,
           ),
         ),
