@@ -11,7 +11,7 @@ class QuickPickGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 더미 데이터
+    // 더미 데이터 확장
     final tracks = [
       const Track(
         id: '1',
@@ -27,24 +27,52 @@ class QuickPickGrid extends StatelessWidget {
         thumbnailUrl: 'https://i.ytimg.com/vi/gdZLi9oWNZg/maxresdefault.jpg',
         videoUrl: 'https://www.youtube.com/watch?v=gdZLi9oWNZg',
       ),
-      // 더 많은 더미 트랙 추가...
+      const Track(
+        id: '3',
+        title: 'Spring Day',
+        artist: 'BTS',
+        thumbnailUrl: 'https://i.ytimg.com/vi/xEeFrLSkMm8/maxresdefault.jpg',
+        videoUrl: 'https://www.youtube.com/watch?v=xEeFrLSkMm8',
+      ),
+      const Track(
+        id: '4',
+        title: 'Boy With Luv',
+        artist: 'BTS ft. Halsey',
+        thumbnailUrl: 'https://i.ytimg.com/vi/XsX3ATc3FbA/maxresdefault.jpg',
+        videoUrl: 'https://www.youtube.com/watch?v=XsX3ATc3FbA',
+      ),
+      const Track(
+        id: '5',
+        title: 'DNA',
+        artist: 'BTS',
+        thumbnailUrl: 'https://i.ytimg.com/vi/MBdVXkSdhwU/maxresdefault.jpg',
+        videoUrl: 'https://www.youtube.com/watch?v=MBdVXkSdhwU',
+      ),
+      const Track(
+        id: '6',
+        title: 'FAKE LOVE',
+        artist: 'BTS',
+        thumbnailUrl: 'https://i.ytimg.com/vi/7C2z4GqqS5E/maxresdefault.jpg',
+        videoUrl: 'https://www.youtube.com/watch?v=7C2z4GqqS5E',
+      ),
     ];
 
     return SliverPadding(
-      padding: const EdgeInsets.all(16),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // 상하 패딩 줄임
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 16,
+          mainAxisSpacing: 12, // 간격 줄임
           crossAxisSpacing: 16,
           childAspectRatio: 1.5,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            final track = tracks[index % tracks.length];
+            final track = tracks[index];
             return _QuickPickItem(track: track);
           },
-          childCount: 4,
+          childCount: tracks.length, // 6개로 변경
         ),
       ),
     );
