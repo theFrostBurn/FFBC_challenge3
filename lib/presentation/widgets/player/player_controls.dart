@@ -19,10 +19,14 @@ class PlayerControls extends StatelessWidget {
             padding: EdgeInsets.zero,
             onPressed: () => audioService.toggleFavorite(),
             child: Icon(
-              audioService.isFavorite
+              audioService.currentTrack != null &&
+                      audioService
+                          .isFavoriteTrack(audioService.currentTrack!.id)
                   ? CupertinoIcons.heart_fill
                   : CupertinoIcons.heart,
-              color: audioService.isFavorite
+              color: audioService.currentTrack != null &&
+                      audioService
+                          .isFavoriteTrack(audioService.currentTrack!.id)
                   ? CupertinoColors.systemRed
                   : CupertinoColors.systemGrey,
               size: 25,

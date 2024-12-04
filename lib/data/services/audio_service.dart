@@ -12,6 +12,7 @@ class AudioService extends ChangeNotifier {
   bool _isPlaying = false;
   bool _isFavorite = false;
   bool _isShuffleOn = false;
+  final Set<String> _favorites = {};
 
   List<Track> get _currentPlaylist {
     if (_currentTrack == null) return [];
@@ -62,6 +63,14 @@ class AudioService extends ChangeNotifier {
   bool get isFavorite => _isFavorite;
   bool get isShuffleOn => _isShuffleOn;
 
+  List<Track> get favorites {
+    return TrackData.allTracks
+        .where((track) => _favorites.contains(track.id))
+        .toList();
+  }
+
+  bool isFavoriteTrack(String trackId) => _favorites.contains(trackId);
+
   Future<void> play(Track track) async {
     try {
       if (track.youtubeUrl == null) {
@@ -85,31 +94,32 @@ class AudioService extends ChangeNotifier {
   }
 
   Future<void> playPrevious() async {
-    final currentIndex = _currentIndex;
-    if (_currentPlaylist.isEmpty) return;
+    if (_isShuffleOn) {
+      final random = Random();
+      final allTracks = TrackData.allTracks;
+      final previousTrack = allTracks[random.nextInt(allTracks.length)];
+      await play(previousTrack);
+    } else {
+      final currentIndex = _currentIndex;
+      if (_currentPlaylist.isEmpty) return;
 
-    // 현재 인덱스가 0이면 마지막 곡으로, 아니면 이전 곡으로
-    final previousIndex =
-        currentIndex <= 0 ? _currentPlaylist.length - 1 : currentIndex - 1;
-
-    final previousTrack = _currentPlaylist[previousIndex];
-    await play(previousTrack);
+      final previousIndex =
+          currentIndex <= 0 ? _currentPlaylist.length - 1 : currentIndex - 1;
+      final previousTrack = _currentPlaylist[previousIndex];
+      await play(previousTrack);
+    }
   }
 
   Future<void> playNext() async {
-    final currentIndex = _currentIndex;
-    if (_currentPlaylist.isEmpty) return;
-
     if (_isShuffleOn) {
-      // 현재 곡을 제외한 랜덤한 곡 선택
       final random = Random();
-      final nextIndex =
-          (currentIndex + random.nextInt(_currentPlaylist.length - 1) + 1) %
-              _currentPlaylist.length;
-      final nextTrack = _currentPlaylist[nextIndex];
+      final allTracks = TrackData.allTracks;
+      final nextTrack = allTracks[random.nextInt(allTracks.length)];
       await play(nextTrack);
     } else {
-      // 기존의 순차 재생 로직
+      final currentIndex = _currentIndex;
+      if (_currentPlaylist.isEmpty) return;
+
       final nextIndex =
           currentIndex >= _currentPlaylist.length - 1 ? 0 : currentIndex + 1;
       final nextTrack = _currentPlaylist[nextIndex];
@@ -148,8 +158,14 @@ class AudioService extends ChangeNotifier {
   }
 
   void toggleFavorite() {
-    _isFavorite = !_isFavorite;
-    notifyListeners();
+    if (_currentTrack != null) {
+      if (_favorites.contains(_currentTrack!.id)) {
+        _favorites.remove(_currentTrack!.id);
+      } else {
+        _favorites.add(_currentTrack!.id);
+      }
+      notifyListeners();
+    }
   }
 
   void toggleShuffle() {
