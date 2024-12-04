@@ -45,6 +45,30 @@ class AudioService extends ChangeNotifier {
         .indexWhere((track) => track.id == _currentTrack!.id);
   }
 
+  List<Track> get _allTracks {
+    final allTracks = <Track>[
+      ...TrackData.allTracks,
+      ...TrackData.kpopTracks,
+      ...TrackData.hiphopTracks,
+      ...TrackData.popTracks,
+      ...TrackData.indieTracks,
+      ...TrackData.relaxTracks,
+      ...TrackData.trendTracks,
+    ];
+
+    final uniqueTracks = <Track>[];
+    final addedIds = <String>{};
+
+    for (final track in allTracks) {
+      if (!addedIds.contains(track.id)) {
+        uniqueTracks.add(track);
+        addedIds.add(track.id);
+      }
+    }
+
+    return uniqueTracks;
+  }
+
   AudioService(this._youtubeService) {
     _player.playerStateStream.listen((state) {
       final playing = state.playing;
@@ -96,7 +120,7 @@ class AudioService extends ChangeNotifier {
   Future<void> playPrevious() async {
     if (_isShuffleOn) {
       final random = Random();
-      final allTracks = TrackData.allTracks;
+      final allTracks = _allTracks;
       final previousTrack = allTracks[random.nextInt(allTracks.length)];
       await play(previousTrack);
     } else {
@@ -113,7 +137,7 @@ class AudioService extends ChangeNotifier {
   Future<void> playNext() async {
     if (_isShuffleOn) {
       final random = Random();
-      final allTracks = TrackData.allTracks;
+      final allTracks = _allTracks;
       final nextTrack = allTracks[random.nextInt(allTracks.length)];
       await play(nextTrack);
     } else {
