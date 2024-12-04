@@ -17,34 +17,44 @@ class PlayerProgress extends StatelessWidget {
     final audioService = context.watch<AudioService>();
 
     return StreamBuilder<Duration?>(
-      stream: audioService.positionStream,
-      builder: (context, snapshot) {
-        final position = snapshot.data ?? Duration.zero;
+      stream: audioService.durationStream,
+      builder: (context, durationSnapshot) {
+        return StreamBuilder<Duration?>(
+          stream: audioService.positionStream,
+          builder: (context, positionSnapshot) {
+            final duration =
+                durationSnapshot.data ?? const Duration(minutes: 3);
+            final position = positionSnapshot.data ?? Duration.zero;
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Column(
-            children: [
-              CupertinoSlider(
-                value: position.inSeconds.toDouble(),
-                max: 100, // TODO: 실제 트랙 길이로 변경
-                onChanged: (value) {
-                  audioService.seek(Duration(seconds: value.toInt()));
-                },
+            // position이 duration을 초과하지 않도록 보장
+            final currentPosition = position > duration ? duration : position;
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                children: [
+                  CupertinoSlider(
+                    value: currentPosition.inSeconds.toDouble(),
+                    min: 0,
+                    max: duration.inSeconds.toDouble(),
+                    onChanged: (value) {
+                      audioService.seek(Duration(seconds: value.toInt()));
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(_formatDuration(currentPosition)),
+                        Text(_formatDuration(duration)),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(_formatDuration(position)),
-                    Text(_formatDuration(
-                        const Duration(minutes: 3))), // TODO: 실제 트랙 길이로 변경
-                  ],
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
