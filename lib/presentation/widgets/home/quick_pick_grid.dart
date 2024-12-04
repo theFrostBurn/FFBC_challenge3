@@ -64,10 +64,8 @@ class _QuickPickItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: () async {
         try {
-          final youtubeService = context.read<YoutubeService>();
           final audioService = context.read<AudioService>();
 
-          // 현재 재생 중인 트랙 정보 표시
           if (context.mounted) {
             await showCupertinoDialog(
               context: context,
@@ -87,22 +85,17 @@ class _QuickPickItem extends StatelessWidget {
               ),
             ).then((shouldPlay) async {
               if (shouldPlay == true) {
-                // YouTube URL에서 실제 스트리밍 URL 가져오기
-                final trackWithUrl =
-                    await youtubeService.getTrackFromUrl(track.videoUrl!);
-                // 트랙 재생
-                await audioService.play(trackWithUrl);
-
-                // 재생 화면으로 전환
-                if (context.mounted) {
-                  final navigationService = context.read<NavigationService>();
-                  navigationService.navigateToTab(1); // 샘플(재생) 탭으로 전환
+                if (track.youtubeUrl != null) {
+                  await audioService.play(track);
+                  if (context.mounted) {
+                    final navigationService = context.read<NavigationService>();
+                    navigationService.navigateToTab(1);
+                  }
                 }
               }
             });
           }
         } catch (e) {
-          // 에러 메시지 표시
           if (context.mounted) {
             showCupertinoDialog(
               context: context,

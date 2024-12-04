@@ -32,18 +32,20 @@ class AppTabScaffold extends StatefulWidget {
 
 class _AppTabScaffoldState extends State<AppTabScaffold> {
   int _selectedIndex = 0;
-  late final NavigationService _navigationService;
+  NavigationService? _navigationService;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _navigationService = Provider.of<NavigationService>(context);
+    _navigationService ??= Provider.of<NavigationService>(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_navigationService == null) return const SizedBox.shrink();
+
     return CupertinoTabScaffold(
-      controller: _navigationService.tabController,
+      controller: _navigationService!.tabController,
       tabBar: CupertinoTabBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
@@ -109,7 +111,7 @@ class _AppTabScaffoldState extends State<AppTabScaffold> {
 
   @override
   void dispose() {
-    _navigationService.dispose();
+    _navigationService?.dispose();
     super.dispose();
   }
 }

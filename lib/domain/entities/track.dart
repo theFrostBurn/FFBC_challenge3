@@ -3,14 +3,14 @@ class Track {
   final String title;
   final String artist;
   final String? thumbnailUrl;
-  final String? videoUrl;
+  final String? youtubeUrl;
 
   const Track({
     required this.id,
     required this.title,
     required this.artist,
     this.thumbnailUrl,
-    this.videoUrl,
+    this.youtubeUrl,
   });
 
   Track copyWith({
@@ -18,14 +18,14 @@ class Track {
     String? title,
     String? artist,
     String? thumbnailUrl,
-    String? videoUrl,
+    String? youtubeUrl,
   }) {
     return Track(
       id: id ?? this.id,
       title: title ?? this.title,
       artist: artist ?? this.artist,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
-      videoUrl: videoUrl ?? this.videoUrl,
+      youtubeUrl: youtubeUrl ?? this.youtubeUrl,
     );
   }
 }

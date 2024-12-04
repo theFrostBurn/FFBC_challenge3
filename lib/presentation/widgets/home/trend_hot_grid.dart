@@ -63,7 +63,6 @@ class _TrendHotItem extends StatelessWidget {
       padding: EdgeInsets.zero,
       onPressed: () async {
         try {
-          final youtubeService = context.read<YoutubeService>();
           final audioService = context.read<AudioService>();
 
           if (context.mounted) {
@@ -85,11 +84,11 @@ class _TrendHotItem extends StatelessWidget {
               ),
             ).then((shouldPlay) async {
               if (shouldPlay == true) {
-                final trackWithUrl =
-                    await youtubeService.getTrackFromUrl(track.videoUrl!);
-                await audioService.play(trackWithUrl);
-                if (context.mounted) {
-                  context.read<NavigationService>().navigateToTab(1);
+                if (track.youtubeUrl != null) {
+                  await audioService.play(track);
+                  if (context.mounted) {
+                    context.read<NavigationService>().navigateToTab(1);
+                  }
                 }
               }
             });
