@@ -2,64 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import '../../../domain/entities/track.dart';
+import '../../../domain/entities/category.dart';
 import '../../../data/services/audio_service.dart';
 import '../../../data/services/youtube_service.dart';
 import '../../../data/services/navigation_service.dart';
+import '../../../data/constants/track_data.dart';
 
 class QuickPickGrid extends StatelessWidget {
-  const QuickPickGrid({super.key});
+  final Category? selectedCategory;
+
+  const QuickPickGrid({super.key, this.selectedCategory});
+
+  List<Track> _getTracksByCategory(String? categoryId) {
+    final Map<String, List<Track>> categoryTracks = {
+      'all': TrackData.allTracks,
+      'kpop': TrackData.kpopTracks,
+      'hiphop': TrackData.hiphopTracks,
+      'pop': TrackData.popTracks,
+      'indie': TrackData.indieTracks,
+      'relax': TrackData.relaxTracks,
+    };
+
+    return categoryId == null
+        ? TrackData.allTracks
+        : (categoryTracks[categoryId] ?? TrackData.allTracks);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // 더미 데이터 확장
-    final tracks = [
-      const Track(
-        id: '1',
-        title: 'Butter',
-        artist: 'BTS',
-        thumbnailUrl: 'https://i.ytimg.com/vi/WMweEpGlu_U/maxresdefault.jpg',
-        videoUrl: 'https://www.youtube.com/watch?v=WMweEpGlu_U',
-      ),
-      const Track(
-        id: '2',
-        title: 'Dynamite',
-        artist: 'BTS',
-        thumbnailUrl: 'https://i.ytimg.com/vi/gdZLi9oWNZg/maxresdefault.jpg',
-        videoUrl: 'https://www.youtube.com/watch?v=gdZLi9oWNZg',
-      ),
-      const Track(
-        id: '3',
-        title: 'Spring Day',
-        artist: 'BTS',
-        thumbnailUrl: 'https://i.ytimg.com/vi/xEeFrLSkMm8/maxresdefault.jpg',
-        videoUrl: 'https://www.youtube.com/watch?v=xEeFrLSkMm8',
-      ),
-      const Track(
-        id: '4',
-        title: 'Boy With Luv',
-        artist: 'BTS ft. Halsey',
-        thumbnailUrl: 'https://i.ytimg.com/vi/XsX3ATc3FbA/maxresdefault.jpg',
-        videoUrl: 'https://www.youtube.com/watch?v=XsX3ATc3FbA',
-      ),
-      const Track(
-        id: '5',
-        title: 'DNA',
-        artist: 'BTS',
-        thumbnailUrl: 'https://i.ytimg.com/vi/MBdVXkSdhwU/maxresdefault.jpg',
-        videoUrl: 'https://www.youtube.com/watch?v=MBdVXkSdhwU',
-      ),
-      const Track(
-        id: '6',
-        title: 'FAKE LOVE',
-        artist: 'BTS',
-        thumbnailUrl: 'https://i.ytimg.com/vi/7C2z4GqqS5E/maxresdefault.jpg',
-        videoUrl: 'https://www.youtube.com/watch?v=7C2z4GqqS5E',
-      ),
-    ];
+    final tracks = _getTracksByCategory(selectedCategory?.id);
 
     return SliverPadding(
-      padding:
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // 상하 패딩 줄임
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       sliver: SliverGrid(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

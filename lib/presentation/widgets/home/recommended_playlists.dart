@@ -6,28 +6,17 @@ class RecommendedPlaylists extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 더미 플레이리스트 데이터
     final playlists = [
-      {
-        'title': 'K-POP 히트곡 모음',
-        'imageUrl': 'https://i.ytimg.com/vi/cXCBiF67jLM/maxresdefault.jpg',
-      },
-      {
-        'title': '운동할 때 듣기 좋은 음악',
-        'imageUrl': 'https://i.ytimg.com/vi/9HDEHj2yzew/maxresdefault.jpg',
-      },
-      {
-        'title': '잔잔한 발라드 모음',
-        'imageUrl': 'https://i.ytimg.com/vi/mZz9uYdj_v4/maxresdefault.jpg',
-      },
-      {
-        'title': '드라이브 플레이리스트',
-        'imageUrl': 'https://i.ytimg.com/vi/D_nyuB8GbM8/maxresdefault.jpg',
-      },
-      {
-        'title': '공부할 때 듣는 음악',
-        'imageUrl': 'https://i.ytimg.com/vi/DWcJFNfaw9c/maxresdefault.jpg',
-      },
+      {'title': 'K-POP 히트곡 모음', 'imageUrl': '...'},
+      {'title': '2024 최신 트렌드', 'imageUrl': '...'},
+      {'title': '인기 팝송 플레이리스트', 'imageUrl': '...'},
+      {'title': '드라이브 뮤직', 'imageUrl': '...'},
+      {'title': '편안한 어쿠스틱', 'imageUrl': '...'},
+      {'title': '운동할 때 듣기 좋은', 'imageUrl': '...'},
+      {'title': '공부할 때 집중되는', 'imageUrl': '...'},
+      {'title': '출근길 플레이리스트', 'imageUrl': '...'},
+      {'title': '잔잔한 재즈 컬렉션', 'imageUrl': '...'},
+      {'title': '인디음악 베스트', 'imageUrl': '...'},
     ];
 
     return SliverToBoxAdapter(
