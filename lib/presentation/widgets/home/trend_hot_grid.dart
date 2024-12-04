@@ -52,10 +52,48 @@ class TrendHotGrid extends StatelessWidget {
   }
 }
 
-class _TrendHotItem extends StatelessWidget {
+class _TrendHotItem extends StatefulWidget {
   final Track track;
 
   const _TrendHotItem({required this.track});
+
+  @override
+  State<_TrendHotItem> createState() => _TrendHotItemState();
+}
+
+class _TrendHotItemState extends State<_TrendHotItem>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 1.1),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.1, end: 1.0),
+        weight: 50,
+      ),
+    ]).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,33 +103,15 @@ class _TrendHotItem extends StatelessWidget {
         try {
           final audioService = context.read<AudioService>();
 
-          if (context.mounted) {
-            await showCupertinoDialog(
-              context: context,
-              builder: (context) => CupertinoAlertDialog(
-                title: const Text('재생 준비 중'),
-                content: Text('${track.title}\n${track.artist}'),
-                actions: [
-                  CupertinoDialogAction(
-                    child: const Text('취소'),
-                    onPressed: () => Navigator.pop(context, false),
-                  ),
-                  CupertinoDialogAction(
-                    child: const Text('재생'),
-                    onPressed: () => Navigator.pop(context, true),
-                  ),
-                ],
-              ),
-            ).then((shouldPlay) async {
-              if (shouldPlay == true) {
-                if (track.youtubeUrl != null) {
-                  await audioService.play(track);
-                  if (context.mounted) {
-                    context.read<NavigationService>().navigateToTab(1);
-                  }
-                }
-              }
-            });
+          // 애니메이션 실행
+          await _controller.forward();
+
+          // 곡 재생
+          if (widget.track.youtubeUrl != null) {
+            await audioService.play(widget.track);
+            if (context.mounted) {
+              context.read<NavigationService>().navigateToTab(1);
+            }
           }
         } catch (e) {
           if (context.mounted) {
@@ -111,28 +131,36 @@ class _TrendHotItem extends StatelessWidget {
           }
         }
       },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: CupertinoColors.systemGrey6,
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: track.thumbnailUrl != null
-            ? CachedNetworkImage(
-                imageUrl: track.thumbnailUrl!,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(
-                  child: CupertinoActivityIndicator(),
-                ),
-                errorWidget: (context, url, error) => const Icon(
-                  CupertinoIcons.music_note,
-                  size: 48,
-                ),
-              )
-            : const Icon(
-                CupertinoIcons.music_note,
-                size: 48,
+      child: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _scaleAnimation.value,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: CupertinoColors.systemGrey6,
               ),
+              clipBehavior: Clip.antiAlias,
+              child: widget.track.thumbnailUrl != null
+                  ? CachedNetworkImage(
+                      imageUrl: widget.track.thumbnailUrl!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CupertinoActivityIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Icon(
+                        CupertinoIcons.music_note,
+                        size: 48,
+                      ),
+                    )
+                  : const Icon(
+                      CupertinoIcons.music_note,
+                      size: 48,
+                    ),
+            ),
+          );
+        },
       ),
     );
   }
