@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../../../data/services/audio_service.dart';
+import 'animated_favorite_button.dart';
+import 'animated_shuffle_button.dart';
 
 class PlayerControls extends StatelessWidget {
   const PlayerControls({super.key});
@@ -14,24 +16,7 @@ class PlayerControls extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // 즐겨찾기 버튼
-          CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => audioService.toggleFavorite(),
-            child: Icon(
-              audioService.currentTrack != null &&
-                      audioService
-                          .isFavoriteTrack(audioService.currentTrack!.id)
-                  ? CupertinoIcons.heart_fill
-                  : CupertinoIcons.heart,
-              color: audioService.currentTrack != null &&
-                      audioService
-                          .isFavoriteTrack(audioService.currentTrack!.id)
-                  ? CupertinoColors.systemRed
-                  : CupertinoColors.systemGrey,
-              size: 25,
-            ),
-          ),
+          AnimatedFavoriteButton(audioService: audioService),
           // 이전 곡 버튼
           CupertinoButton(
             padding: EdgeInsets.zero,
@@ -61,18 +46,7 @@ class PlayerControls extends StatelessWidget {
               size: 35,
             ),
           ),
-          // 랜덤 재생 버튼
-          CupertinoButton(
-            padding: EdgeInsets.zero,
-            onPressed: () => audioService.toggleShuffle(),
-            child: Icon(
-              CupertinoIcons.shuffle,
-              color: audioService.isShuffleOn
-                  ? CupertinoColors.activeBlue
-                  : CupertinoColors.systemGrey,
-              size: 25,
-            ),
-          ),
+          AnimatedShuffleButton(audioService: audioService),
         ],
       ),
     );
