@@ -88,9 +88,7 @@ class AudioService extends ChangeNotifier {
   bool get isShuffleOn => _isShuffleOn;
 
   List<Track> get favorites {
-    return TrackData.allTracks
-        .where((track) => _favorites.contains(track.id))
-        .toList();
+    return _allTracks.where((track) => _favorites.contains(track.id)).toList();
   }
 
   bool isFavoriteTrack(String trackId) => _favorites.contains(trackId);
