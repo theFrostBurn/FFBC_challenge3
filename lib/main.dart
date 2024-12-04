@@ -10,7 +10,7 @@ void main() {
     MultiProvider(
       providers: [
         Provider(create: (_) => YoutubeService()),
-        Provider(create: (_) => AudioService()),
+        ChangeNotifierProvider(create: (_) => AudioService()),
         ChangeNotifierProvider(create: (_) => NavigationService()),
       ],
       child: const MusicPlayerApp(),

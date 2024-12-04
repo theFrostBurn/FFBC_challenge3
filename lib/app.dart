@@ -6,6 +6,9 @@ import 'presentation/pages/library/library_page.dart';
 import 'presentation/pages/player/player_page.dart';
 import 'package:provider/provider.dart';
 import 'data/services/navigation_service.dart';
+import 'presentation/widgets/player/mini_player.dart';
+import 'data/services/audio_service.dart';
+import 'data/services/youtube_service.dart';
 
 class MusicPlayerApp extends StatelessWidget {
   const MusicPlayerApp({super.key});
@@ -70,18 +73,34 @@ class _AppTabScaffoldState extends State<AppTabScaffold> {
       tabBuilder: (context, index) {
         return CupertinoTabView(
           builder: (context) {
-            switch (index) {
-              case 0:
-                return const HomePage();
-              case 1:
-                return const PlayerPage();
-              case 2:
-                return const ExplorePage();
-              case 3:
-                return const LibraryPage();
-              default:
-                return const HomePage();
-            }
+            return MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                    value: context.read<AudioService>()),
+                Provider.value(value: context.read<YoutubeService>()),
+                ChangeNotifierProvider.value(
+                    value: context.read<NavigationService>()),
+              ],
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    switch (index) {
+                      0 => const HomePage(),
+                      1 => const PlayerPage(),
+                      2 => const ExplorePage(),
+                      3 => const LibraryPage(),
+                      _ => const HomePage(),
+                    },
+                    const Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: MiniPlayer(),
+                    ),
+                  ],
+                ),
+              ),
+            );
           },
         );
       },

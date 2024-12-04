@@ -28,25 +28,26 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const HomeAppBar(),
-      child: SafeArea(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 16),
-            ),
-            CategoryFilterBar(
-              categories: _categories,
-              selectedCategory: _selectedCategory,
-              onCategorySelected: (category) {
-                setState(() {
-                  _selectedCategory = category;
-                });
-              },
-            ),
-            const QuickPickGrid(),
-            const RecommendedPlaylists(),
-          ],
-        ),
+      child: CustomScrollView(
+        slivers: <Widget>[
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 16),
+          ),
+          CategoryFilterBar(
+            categories: _categories,
+            selectedCategory: _selectedCategory,
+            onCategorySelected: (category) {
+              setState(() {
+                _selectedCategory = category;
+              });
+            },
+          ),
+          const QuickPickGrid(),
+          const RecommendedPlaylists(),
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 60),
+          ),
+        ],
       ),
     );
   }

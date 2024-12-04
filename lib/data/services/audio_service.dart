@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 import '../../domain/entities/track.dart';
 
-class AudioService {
+class AudioService extends ChangeNotifier {
   final _player = AudioPlayer();
   Track? _currentTrack;
 
@@ -20,6 +21,7 @@ class AudioService {
       await _player.setUrl(track.videoUrl!);
       _currentTrack = track;
       await _player.play();
+      notifyListeners();
     } catch (e) {
       throw Exception('Failed to play track: $e');
     }
@@ -27,21 +29,27 @@ class AudioService {
 
   Future<void> pause() async {
     await _player.pause();
+    notifyListeners();
   }
 
   Future<void> resume() async {
     await _player.play();
+    notifyListeners();
   }
 
   Future<void> stop() async {
     await _player.stop();
+    notifyListeners();
   }
 
   Future<void> seek(Duration position) async {
     await _player.seek(position);
+    notifyListeners();
   }
 
+  @override
   void dispose() {
     _player.dispose();
+    super.dispose();
   }
 }
