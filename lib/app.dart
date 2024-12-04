@@ -60,7 +60,7 @@ class _AppTabScaffoldState extends State<AppTabScaffold> {
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.music_note),
-            label: '샘플',
+            label: '재생',
           ),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.compass),

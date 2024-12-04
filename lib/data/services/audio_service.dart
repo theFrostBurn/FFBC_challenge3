@@ -3,12 +3,15 @@ import 'package:just_audio/just_audio.dart';
 import '../../domain/entities/track.dart';
 import '../constants/track_data.dart';
 import '../services/youtube_service.dart';
+import 'dart:math';
 
 class AudioService extends ChangeNotifier {
   final _player = AudioPlayer();
   final YoutubeService _youtubeService;
   Track? _currentTrack;
   bool _isPlaying = false;
+  bool _isFavorite = false;
+  bool _isShuffleOn = false;
 
   List<Track> get _currentPlaylist {
     if (_currentTrack == null) return [];
@@ -56,6 +59,8 @@ class AudioService extends ChangeNotifier {
   Stream<PlayerState> get playerStateStream => _player.playerStateStream;
   Stream<Duration?> get positionStream => _player.positionStream;
   Stream<Duration?> get durationStream => _player.durationStream;
+  bool get isFavorite => _isFavorite;
+  bool get isShuffleOn => _isShuffleOn;
 
   Future<void> play(Track track) async {
     try {
@@ -95,12 +100,21 @@ class AudioService extends ChangeNotifier {
     final currentIndex = _currentIndex;
     if (_currentPlaylist.isEmpty) return;
 
-    // 현재 인덱스가 마지막이면 첫 곡으로, 아니면 다음 곡으로
-    final nextIndex =
-        currentIndex >= _currentPlaylist.length - 1 ? 0 : currentIndex + 1;
-
-    final nextTrack = _currentPlaylist[nextIndex];
-    await play(nextTrack);
+    if (_isShuffleOn) {
+      // 현재 곡을 제외한 랜덤한 곡 선택
+      final random = Random();
+      final nextIndex =
+          (currentIndex + random.nextInt(_currentPlaylist.length - 1) + 1) %
+              _currentPlaylist.length;
+      final nextTrack = _currentPlaylist[nextIndex];
+      await play(nextTrack);
+    } else {
+      // 기존의 순차 재생 로직
+      final nextIndex =
+          currentIndex >= _currentPlaylist.length - 1 ? 0 : currentIndex + 1;
+      final nextTrack = _currentPlaylist[nextIndex];
+      await play(nextTrack);
+    }
   }
 
   Future<void> pause() async {
@@ -130,6 +144,16 @@ class AudioService extends ChangeNotifier {
 
   Future<void> seek(Duration position) async {
     await _player.seek(position);
+    notifyListeners();
+  }
+
+  void toggleFavorite() {
+    _isFavorite = !_isFavorite;
+    notifyListeners();
+  }
+
+  void toggleShuffle() {
+    _isShuffleOn = !_isShuffleOn;
     notifyListeners();
   }
 
