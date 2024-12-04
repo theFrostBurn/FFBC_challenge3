@@ -6,6 +6,7 @@ class AudioService extends ChangeNotifier {
   final _player = AudioPlayer();
   Track? _currentTrack;
   bool _isPlaying = false;
+  bool _isInitialized = false;
 
   AudioService() {
     _player.playerStateStream.listen((state) {
@@ -66,6 +67,11 @@ class AudioService extends ChangeNotifier {
 
   Future<void> seek(Duration position) async {
     await _player.seek(position);
+    notifyListeners();
+  }
+
+  Future<void> initializeAudioPlayer() async {
+    _isInitialized = true;
     notifyListeners();
   }
 
