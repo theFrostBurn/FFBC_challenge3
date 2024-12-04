@@ -10,7 +10,7 @@ class AudioService extends ChangeNotifier {
   final YoutubeService _youtubeService;
   Track? _currentTrack;
   bool _isPlaying = false;
-  bool _isFavorite = false;
+  final bool _isFavorite = false;
   bool _isShuffleOn = false;
   final Set<String> _favorites = {};
 

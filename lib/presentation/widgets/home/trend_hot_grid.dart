@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import '../../../domain/entities/track.dart';
 import 'package:provider/provider.dart';
 import '../../../data/services/audio_service.dart';
-import '../../../data/services/youtube_service.dart';
 import '../../../data/services/navigation_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../data/constants/track_data.dart';
@@ -12,7 +11,7 @@ class TrendHotGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trendTracks = TrackData.trendTracks;
+    const trendTracks = TrackData.trendTracks;
 
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

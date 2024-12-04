@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../../domain/entities/track.dart';
 import '../../../domain/entities/category.dart';
 import '../../../data/services/audio_service.dart';
-import '../../../data/services/youtube_service.dart';
 import '../../../data/services/navigation_service.dart';
 import '../../../data/constants/track_data.dart';
 
